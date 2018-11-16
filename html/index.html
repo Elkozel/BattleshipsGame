@@ -1,41 +1,35 @@
 <!doctype html>
 <html>
     <head>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title> Welcome to Battleships! </title>
         <link href="login.css" type="text/css" rel="stylesheet">
         <link href="statistics.css" type="text/css" rel="stylesheet">
         <link href="moreInfo.css" type="text/css" rel="stylesheet">
-        <style>
-            body{
-                margin: 0px;
-                background-color: black;
-            }
-        </style>
     </head>
     <body>
         <div id="login_background">
             <div id="login_filter"></div>
             <h1 id="login_title"> Welcome to Battleships! </h1>
             <div id="login_area">
-                <form action="#" id="login_form">
+                <form action="POST" id="login_form">
                     <input type="text" id="login_username" name="username" placeholder="Username">
                     <button type="submit" id="button_submit">Let's roll!</button>
                 </form>
             </div>
-            <div id="statistics_area">
-                <div id="statstics_cage">
-                    <span> 120 </span>
-                    <p> Players today </p>
-                </div>
-                <div id="statstics_cage">
-                    <span> 1250 </span>
-                    <p> Curses over chat </p>
-                </div>
-                <div id="statstics_cage">
-                    <span> 0 </span>
-                    <p> Fucks given </p>
-                </div>
+        </div>
+        <div class="statistics_area">
+            <div class="statstics_cage">
+                <span> 120 </span>
+                <p> Players today </p>
+            </div>
+            <div class="statstics_cage">
+                <span> 1250 </span>
+                <p> Curses over chat </p>
+            </div>
+            <div class="statstics_cage">
+                <span> No </span>
+                <p> Is Andy Playing? </p>
             </div>
         </div>
         <div id="moreInfo">

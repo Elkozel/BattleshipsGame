@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Try1</title>
+    <script>
+        var connection = null;
+        function initializeConnection(ip, port){
+            window.WebSocket = windwo.WebSocket || window.MozWebSocket;
+            connection = new WebSocket("ws://" + ip + ":" + port);
+
+            connection.onerror = function(error){
+                console.log("Critical error encountered: " + error);
+            }
+            connection.onopen = function(){
+                
+            }
+            connection.onmessage = function(message){
+                
+            }
+        }
+    </script>
+    <script>
+        var Game = {
+            sessionID: "34S84K2", // filled by server
+            userName: "Elkozel" // filled by server
+        }
+        function uploadCookies(){
+            console.log(new Time());
+        }
+        uploadCookies();
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

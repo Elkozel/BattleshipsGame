@@ -37,7 +37,7 @@
     text-align: right;
 }
 @media (max-width:768px){
-    .infoItem h2{
+    .infoItem h2, .infoItem.toRight h2{
         text-align: center;
     }
     .infoItem p{

@@ -1,3 +1,4 @@
+
 body{
     margin: 0px !important;
     background-color: black !important;
@@ -32,14 +33,9 @@ body{
     z-index: 2;
 }
 #login_area .invalid, #login_area .invalid:hover, #login_area .invalid:focus{
-    transition: all 0.5s ease-out;
-    -o-transition: all 0.5s ease-out;
-    -ms-transition: all 0.5s ease-out;
-    -moz-transition: all 0.5s ease-out;
-    -webkit-transition: all 0.5s ease-out;
     border-color: red !important;
     color:red !important;
-    border-width: 1% !important;
+    border-style: solid !important;
 }
 #login_username{
     width: 96%;
@@ -52,19 +48,38 @@ body{
     align-self: center;
     outline: none;
     border-color: transparent;
-    border-width: 1%;
     border-style: solid;
     border-radius: 15px;
     transition: border 0.4s ease-in, color 0.4s ease-in;
-    -o-transition: border 0.4s ease-in, color 0.4s ease-in;
-    -ms-transition: border 0.4s ease-in, color 0.4s ease-in;
-    -moz-transition: border 0.4s ease-in, color 0.4s ease-in;
-    -webkit-transition: border 0.4s ease-in, color 0.4s ease-in;
     min-width: 180px;
 }
 #login_username:hover, #login_username:focus{
     border-color: black;
     color: black;
+}
+#login_username.invalid + #login_errorPointer{
+    opacity: 1; 
+}
+#login_errorPointer{
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -100%);
+    text-align: center;
+    margin: auto;
+    max-width: 90%;
+    color: white;
+    word-wrap: break-word;
+    background-color: rgba(255, 0, 0, 0.78);
+    border-color: white;
+    border-style: solid;
+    border-bottom: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 0.75% 3%;
+    overflow: hidden;
+    transition: opacity 0.5s linear;
 }
 #button_submit{
     outline: none;

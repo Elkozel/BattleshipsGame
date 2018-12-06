@@ -240,7 +240,7 @@ var gameServer = {
         }
     },
     addPlayer(player) {
-        if (this.checkUsername(player.name)){
+        if (!this.checkUsername(player.name)){
             this.players.push(player);
             return true;
         }

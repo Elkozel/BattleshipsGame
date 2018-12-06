@@ -3,6 +3,8 @@ var Game = {
     userName: null,
     opponentName: null,
     startTime: null,
+    moves: [],
+    startTime: null
 }
 function clicked(obj){
     if(obj.cellIndex != null && obj.parentNode.rowIndex != null){
@@ -12,4 +14,9 @@ function clicked(obj){
 }
 function criticalERROR(message){
     document.write("<h1>CRITICAL ERROR ENCOUNTERED</h1><br>" + message);
+}
+function updateGame(){
+
+    
+    GameField.refresh();
 }

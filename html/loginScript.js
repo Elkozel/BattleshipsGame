@@ -12,7 +12,7 @@ from.onsubmit = function(){
 }
 
 function sendUsername(username){
-
+    
 }
 
 username.addEventListener("keyup", function(){

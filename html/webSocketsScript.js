@@ -1,18 +1,23 @@
 var connection = null;
 function initializeConnection(ip, port){
-    window.WebSocket = windwo.WebSocket || window.MozWebSocket;
+    window.WebSocket = window.WebSocket || window.MozWebSocket;
     connection = new WebSocket("ws://" + ip + ":" + port);
 
     connection.onerror = function(error){
         console.log("Critical error encountered: " + error);
     }
     connection.onmessage = function(message){
-        message = JSON.parse(message);
+        console.log("Received: " + message.data);
+        message = JSON.parse(message.data);
+        console.log("Received: " + message.request);
         if(message.chatMessage != null){
-            updateChat(message); // receive chat message
+            updateChat(message.chatMessage); // receive chat message
+        }
+        if(message.chatUpdate != null){
+            resetChat(message.chatUpdate);
         }
         if(message.errorMessage != null){
-            
+            console.log("Received error: " + message.errorMessage);
         }
         if(message.move != null){
             registerMove(message.move , message.X, message.Y); // register a move from the other player
@@ -23,10 +28,13 @@ function initializeConnection(ip, port){
         else if(message.request != null){
             if(message.request === "auth"){
                 var authentication = {
-                    gameID: 1234123,
+                    gameID: null,
                     userName: "Hello World"
                 }
                 connection.send(JSON.stringify(authentication)); // send authentication
+            }
+            else{
+                console.log("Unable to read message!");
             }
         }
         else
@@ -65,21 +73,14 @@ function sendChatMessage(message){
 
 function updateGameData(message){
     switch(message.updateType){
-        case "Late Connection":
-            if(message.ships != null){
-                for(s in message.ships){
-                    for(t in GameField.ships){
-                        if(t.update(s)){
-                            message.ships.remove(s);
-                            break;
-                        }
-                    }
-                }
-                if(message.ships.length > 0){
-                    
-                }
-            }
-            updateShips();
+        case "Game Started":
+            if(message.ships != null)
+                GameField.ships = message.ships;
+            Game.opponentName = message.opponentName;
+            Game.startTime = message.startTime;
+            Game.status = message.status;
+            Game.moves = message.moves;
+            updateGame();
         break;
         case "End": 
             if(message.reason != null)

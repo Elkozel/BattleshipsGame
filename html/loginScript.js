@@ -1,29 +1,17 @@
-
 var from = document.getElementById('login_form');
 var username = document.getElementById('login_username');
-from.onsubmit = function(e){
-    if(username.value.length >= 5 ){
-        if(check(username.value)){
-            sendUsername(username.value);
-        }
-        else {
-        username.classList.add("invalid");
-        prevUsername = username.value;
-        document.getElementById('login_errorPointer').innerHTML = 'Username already taken';
-        e.preventDefault();
-        }        
+from.onsubmit = function(){
+    if(username.value.length >= 5){
+        sendUsername(username.value);
     }
     else{
         username.classList.add("invalid");
         prevUsername = username.value;
-        document.getElementById('login_errorPointer').innerHTML = 'Password needs to be at least 5 characters';
-        e.preventDefault();
     }
+    return false;
 }
 
-
-
-function sendUsername(userNick){
+function sendUsername(username){
     
 }
 

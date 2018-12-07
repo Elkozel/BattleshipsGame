@@ -9,7 +9,6 @@ function initializeConnection(ip, port){
     connection.onmessage = function(message){
         console.log("Received: " + message.data);
         message = JSON.parse(message.data);
-        console.log("Received: " + message.request);
         if(message.chatMessage != null){
             updateChat(message.chatMessage); // receive chat message
         }
@@ -17,7 +16,9 @@ function initializeConnection(ip, port){
             resetChat(message.chatUpdate);
         }
         if(message.errorMessage != null){
-            console.log("Received error: " + message.errorMessage);
+            if(message.errorMessage === "Username is not in the database"){
+                criticalERROR("Username is not in the database");
+            }
         }
         if(message.move != null){
             registerMove(message.move , message.X, message.Y); // register a move from the other player
@@ -37,8 +38,11 @@ function initializeConnection(ip, port){
                 console.log("Unable to read message!");
             }
         }
-        else
-            criticalERROR("Request from server could not be understood"); // notify user of an error
+        else if(message == undefined && message == null){
+            console.log("Problemmmmmmmm");
+        }
+        //else
+            //criticalERROR("Request from server could not be understood "); // notify user of an error
     }
 }
 
@@ -62,6 +66,29 @@ function sendMove(positionX, positionY){
     }
 }
 
+function getGames(){
+    var message = {
+        request: "games"
+    }
+    connection.send(JSON.stringify(message));
+}
+
+function createGame(){
+    var message = {
+        request: "createGame",
+        open: false
+    }
+    connection.send(JSON.stringify(message));
+}
+
+function createPrivateGame(){
+    var message = {
+        request: "createGame",
+        open: false
+    }
+    connection.send(JSON.stringify(message));
+}
+
 function sendChatMessage(message){
     if(connection != null){
          var chatMessage = {
@@ -81,6 +108,12 @@ function updateGameData(message){
             Game.status = message.status;
             Game.moves = message.moves;
             updateGame();
+        break;
+        case "Game Created":
+            Game.sessionID = message.gameID;
+        break;
+        case "Games on wait":
+            console.log(message.games);
         break;
         case "End": 
             if(message.reason != null)

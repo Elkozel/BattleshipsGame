@@ -148,3 +148,7 @@ function constructShips() {
     }
     return ret;
 }
+var Pointer = {
+    element: document.getElementById("shipPlace"),
+    size: null
+}

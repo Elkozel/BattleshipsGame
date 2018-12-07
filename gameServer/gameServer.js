@@ -40,7 +40,7 @@ class Player {
                 }
             }
             else
-                this.connection.sendUTF(JSON.stringify({ errorMessage: "Error: unable to read orientation of ship (" + s.orientation + ")" }));
+                this.connection.send(JSON.stringify({ errorMessage: "Error: unable to read orientation of ship (" + s.orientation + ")" }));
         }
         return false;
     }
@@ -72,8 +72,11 @@ class Game {
             this.open = true;
         else
             this.open = false;
-        this.Player1 = new Player(Player1, this);
-        this.Player2 = new Player(Player2, this);
+        Player1.game = this;
+        this.Player1 = Player1;
+        this.Player2 = Player2;
+        if (Player2 != null)
+            Player2.game = this;
         this.status = "pending";
     }
     registerMove(move) {
@@ -106,16 +109,16 @@ class Game {
             console.log("Huge error, move not primal");
     }
     sendMessage(message) {
-        this.Player1.connection.sendUTF(message);
-        this.Player2.connection.sendUTF(message);
+        this.Player1.connection.send(message);
+        this.Player2.connection.send(message);
     }
     prepare() {
         var temp = new Date();
         temp.setSeconds(temp.getSeconds + 15);
         this.startTime = temp;
-        this.gameID = GameServer.getID();
         this.status = "prep";
         if (this.open) {
+            this.gameID = GameServer.getID();
             GameServer.games.push(this);
             GameServer.waitList.slice(GameServer.waitList.findIndex(this), 1);
         }
@@ -156,11 +159,11 @@ class Game {
         else
             console.log("EROR, I could not delete the game");
     }
-    disconnected(){
-        if((!game.Player1.isConnected || !game.Player2.isConnected) && game.status == "ongoing")
+    disconnected() {
+        if ((!game.Player1.isConnected || !game.Player2.isConnected) && game.status == "ongoing")
             game.broadcast(JSON.stringify({ errorMessage: "Game failed to start (Opponent disconnected)", disconnect: true }));
     }
-    reconnected(player){
+    reconnected(player) {
         game.broadcast(JSON.stringify({ reconnect: true }));
         var broadcast = this.sendGame(player);
         broadcast.updateType = "Game started";
@@ -215,10 +218,9 @@ class Game {
     }
 }
 
-
 var gameServer = {
     games: [],
-    players: [],
+    players: [new Player("Hello World")],
     waitList: [],
     nextID: 0,
     getID: function () {
@@ -227,9 +229,9 @@ var gameServer = {
     createGame: function (Player1) {
         this.waitList.push(new Game(Player1, null, null));
     },
-    createPrivateGame: function (Player1, Player2) {
-        this.games.push(new Game(Player1, Player2, this.getID()));
-        return nextID - 1;
+    createPrivateGame: function (Player1) {
+        this.games.push(new Game(Player1, null, this.getID()));
+        return this.nextID - 1;
     },
     endGame: function (ID) {
         this.getGameByGameID(ID).end();
@@ -240,7 +242,7 @@ var gameServer = {
         }
     },
     addPlayer(player) {
-        if (!this.checkUsername(player.name)){
+        if (this.checkUsername(player.name)) {
             this.players.push(player);
             return true;
         }
@@ -248,17 +250,20 @@ var gameServer = {
             return false;
     },
     checkUsername(username) {
-        for (s in this.players)
+        this.players.forEach(function (s) {
             if (s.name === username)
                 return true;
+        });
         return false;
     },
     getPlayerByUsername: function (username) {
-        for (s in this.players) {
-            if (s.name === username)
-                return s;
+        for(var s = 0; s<this.players.length; s++) {
+            if (this.players[s].name === username) {
+                return this.players[s];
+            }
+            else
+                return;
         }
-        return null;
     },
     getGameByUsername: function (username) {
         for (s in games)
@@ -274,12 +279,13 @@ var gameServer = {
     },
     processRequest: function (connection, message) {
         if (message.userName != null) {
-            var user = this.getPlayerByUsername(message.userName);
+            var user = gameServer.getPlayerByUsername(message.userName);
             if (user != null) {
                 user.attachConnection(connection);
             }
             else {
                 connection.send(JSON.stringify({ errorMessage: "Username is not in the database" }));
+                connection.close();
                 return;
             }
             if (message.gameID != null) {
@@ -296,7 +302,7 @@ var gameServer = {
                         return;
                     }
                     if (game.Player1.isConnected && game.Player2.isConnected) {
-                        if(game.status == null)
+                        if (game.status == null)
                             game.prepare();
                         else if (game.status == "ongoing")
                             game.reconnected(connection.player);
@@ -311,12 +317,68 @@ var gameServer = {
             message.origin = connection.player;
             connection.player.game.registerMove(message);
         }
+        else if (message.request != null) {
+            if (message.request === "games") {
+                var response = {
+                    updateType: "Games on wait",
+                    games: []
+                }
+                for(var s=0; s<this.waitList.length; s++){
+                    this.games.push({
+                        Player1: {
+                            name: this.waitList[s].Player1.name
+                        }
+                    });
+                }
+                connection.send(JSON.stringify(response));
+            }
+            if (message.request === "createGame") {
+                if (message.open != null) {
+                    if (!message.open) {
+                        this.createGame(connection.player);
+                        var response = {
+                            updateType: "Game Created",
+                            gameID: null
+                        }
+                        connection.send(JSON.stringify(response));
+                    }
+                    else {
+                        this.createPrivateGame(connection.player);
+                        var response = {
+                            updateType: "Game Created",
+                            gameID: connection.player.game.gameID
+                        }
+                        connection.send(JSON.stringify(response));
+                    }
+                }
+                else
+                    connection.send(JSON.stringify({ errorMessage: "Insufficient info for the game!" }));
+            }
+            if (message.request === "connect") {
+                if ((message.name != null ^ message.gameID != null) && message.open != null) {
+                    if (message.open) {
+                        var game = this.getGameByUsername(message.name);
+                        game.Player2 = connection.player;
+                        game.prepare();
+                    }
+                    else {
+                        var game = this.getGameByGameID(message.gameID);
+                        game.Player2 = connection.player;
+                        game.prepare();
+                    }
+                }
+                else
+                    connection.send(JSON.stringify({ errorMessage: "Game ID or game type was null!" }));
+            }
+        }
         else if (message.ships != null) {
             connection.player.game.migrateShips(message.ships, connection.player);
         }
         else if (message.chatMessage != null) {
             connection.player.game.addChatMessage(message.chatMessage, connection.player);
         }
+        else
+            connection.send(JSON.stringify({ errorMessage: "Unable to understand massage!" }));
     }
 }
 module.exports = gameServer;

@@ -114,14 +114,9 @@ class Game {
     }
     prepare() {
         var temp = new Date();
-        temp.setSeconds(temp.getSeconds + 15);
+        temp.setSeconds(parseInt(temp.getSeconds() + 15));
         this.startTime = temp;
         this.status = "prep";
-        if (this.open) {
-            this.gameID = GameServer.getID();
-            GameServer.games.push(this);
-            GameServer.waitList.slice(GameServer.waitList.findIndex(this), 1);
-        }
         var broadcast = {
             updateType: "Perparation started",
             startTime: this.startTime,
@@ -129,6 +124,8 @@ class Game {
             gameID: this.gameID
         }
         this.sendMessage(JSON.stringify(broadcast));
+        var game = this;
+        setTimeout(function () { game.start() }, 15000);
     }
     start() {
         if (this.Player1.isConnected && this.Player2.isConnected)
@@ -143,7 +140,7 @@ class Game {
                 this.Player2.sendMessage(JSON.stringify(broadcast));
             }
             else {
-                game.broadcast(JSON.stringify({ errorMessage: "Game failed to start (Opponent disconnected)" }));
+                this.sendMessage(JSON.stringify({ errorMessage: "Game failed to start (Opponent disconnected)" }));
                 this.end();
             }
     }
@@ -151,20 +148,22 @@ class Game {
         this.startTime = null;
         this.turn = null;
         this.status = "End";
-        var game = GameServer.games.indexOf(this);
-        if (game > 0)
+        var game = this.gameID;
+        if (game >= 0)
             setTimeout(function () {
-                GameServer.games.splice(game, 1);
-            }, 300000)
+                var index = gameServer.getIndexByGameID(game)
+                if (index >= 0)
+                    gameServer.games.splice(index, 1);
+            }, 1000)
         else
-            console.log("EROR, I could not delete the game");
+            console.log("ERROR, I could not delete the game");
     }
     disconnected() {
-        if ((!game.Player1.isConnected || !game.Player2.isConnected) && game.status == "ongoing")
-            game.broadcast(JSON.stringify({ errorMessage: "Game failed to start (Opponent disconnected)", disconnect: true }));
+        if ((!this.Player1.isConnected || !this.Player2.isConnected) && this.status == "ongoing")
+            this.broadcast(JSON.stringify({ errorMessage: "Game failed to start (Opponent disconnected)", disconnect: true }));
     }
     reconnected(player) {
-        game.broadcast(JSON.stringify({ reconnect: true }));
+        this.broadcast(JSON.stringify({ reconnect: true }));
         var broadcast = this.sendGame(player);
         broadcast.updateType = "Game started";
         player.sendMessage(JSON.stringify(broadcast));
@@ -257,7 +256,7 @@ var gameServer = {
         return false;
     },
     getPlayerByUsername: function (username) {
-        for(var s = 0; s<this.players.length; s++) {
+        for (var s = 0; s < this.players.length; s++) {
             if (this.players[s].name === username) {
                 return this.players[s];
             }
@@ -266,16 +265,41 @@ var gameServer = {
         }
     },
     getGameByUsername: function (username) {
-        for (s in games)
-            if (s.Player1.name === username || s.Player2.name === username)
-                return s;
-        return null;
+        for (var s = 0; s < this.waitList.length; s++) {
+            if (this.waitList[s].Player1.name === username || this.waitList[s].Player2.name === username) {
+                return this.waitList[s];
+            }
+            else
+                return;
+        }
     },
     getGameByGameID: function (ID) {
-        for (s in this.games)
-            if (s.gameID === ID)
+        for (var s = 0; s < this.games.length; s++) {
+            if (this.games[s].gameID === ID) {
+                return this.games[s];
+            }
+            else
+                return;
+        }
+    },
+    getIndexByGameID: function (ID) {
+        for (var s = 0; s < this.games.length; s++) {
+            if (this.games[s].gameID === ID) {
                 return s;
-        return null;
+            }
+            else
+                return;
+        }
+
+    },
+    getWaitlistIndex: function (game) {
+        for (var s = 0; s < this.waitList.length; s++) {
+            if (this.waitList[s].Player1 === game.Player1 && this.waitList[s].Player2 === game.Player2) {
+                return s;
+            }
+            else
+                return;
+        }
     },
     processRequest: function (connection, message) {
         if (message.userName != null) {
@@ -302,8 +326,12 @@ var gameServer = {
                         return;
                     }
                     if (game.Player1.isConnected && game.Player2.isConnected) {
-                        if (game.status == null)
-                            game.prepare();
+                        if (game.status === "pending") {
+                            if (game.startTime == null)
+                                game.prepare();
+                            else
+                                game.reconnected(connection.player);
+                        }
                         else if (game.status == "ongoing")
                             game.reconnected(connection.player);
                     }
@@ -323,8 +351,8 @@ var gameServer = {
                     updateType: "Games on wait",
                     games: []
                 }
-                for(var s=0; s<this.waitList.length; s++){
-                    this.games.push({
+                for (var s = 0; s < this.waitList.length; s++) {
+                    response.games.push({
                         Player1: {
                             name: this.waitList[s].Player1.name
                         }
@@ -334,7 +362,7 @@ var gameServer = {
             }
             if (message.request === "createGame") {
                 if (message.open != null) {
-                    if (!message.open) {
+                    if (message.open) {
                         this.createGame(connection.player);
                         var response = {
                             updateType: "Game Created",
@@ -355,16 +383,39 @@ var gameServer = {
                     connection.send(JSON.stringify({ errorMessage: "Insufficient info for the game!" }));
             }
             if (message.request === "connect") {
-                if ((message.name != null ^ message.gameID != null) && message.open != null) {
+                if ((message.name != null ^ message.ID != null) && message.open != null) {
                     if (message.open) {
                         var game = this.getGameByUsername(message.name);
-                        game.Player2 = connection.player;
-                        game.prepare();
+                        if (game == null) {
+                            connection.send(JSON.stringify({ errorMessage: "Game does not exist!" }));
+                        }
+                        else if (game.status === "ongoing") {
+                            connection.send(JSON.stringify({ errorMessage: "Trying to join a full game!" }));
+                        }
+                        else if (game.Player2 == null) {
+                            game.Player2 = connection.player;
+                            game.gameID = this.getID();
+                            this.games.push(game);
+                            var index = this.getWaitlistIndex(game);
+                            if (index != null) {
+                                this.waitList.slice(index, 1);
+                                game.prepare();
+                            }
+                            else {
+                                connection.send(JSON.stringify({ errorMessage: "Game could not be transferred, please try again!" }));
+                            }
+                        }
+                        else
+                            connection.send(JSON.stringify({ errorMessage: "Host of the game disconnected!" }));
                     }
                     else {
-                        var game = this.getGameByGameID(message.gameID);
-                        game.Player2 = connection.player;
-                        game.prepare();
+                        var game = this.getGameByGameID(message.ID);
+                        if (game.status === "pending") {
+                            game.Player2 = connection.player;
+                            game.prepare();
+                        }
+                        else
+                            connection.send(JSON.stringify({ errorMessage: "Game join rejected!" }));
                     }
                 }
                 else

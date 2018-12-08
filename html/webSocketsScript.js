@@ -76,7 +76,16 @@ function getGames(){
 function createGame(){
     var message = {
         request: "createGame",
-        open: false
+        open: true
+    }
+    connection.send(JSON.stringify(message));
+}
+
+function connectGame(name){
+    var message = {
+        request: "connect",
+        name: name,
+        open: true
     }
     connection.send(JSON.stringify(message));
 }
@@ -84,6 +93,15 @@ function createGame(){
 function createPrivateGame(){
     var message = {
         request: "createGame",
+        open: false
+    }
+    connection.send(JSON.stringify(message));
+}
+
+function connectPrivateGame(ID){
+    var message = {
+        request: "connect",
+        ID: ID,
         open: false
     }
     connection.send(JSON.stringify(message));

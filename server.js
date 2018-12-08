@@ -51,7 +51,7 @@ WebSocketServer.on('request', function(req){
     });
     connection.on('close', function(){
         if(connection.player != null)
-            connection.player.detachConnection();
+            connection.player.detachConnection(connection);
     });
 });
 

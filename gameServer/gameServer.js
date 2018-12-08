@@ -48,6 +48,13 @@ class Player {
         if (ships.length >= 5)
             this.ships = ships;
     }
+    isAlive(){
+        for(var s=0; s<this.ships.length; s++){
+            if(this.ships[s].size > this.ships[s].hits.length)
+                return true;
+        }
+        return false;
+    }
     attachConnection(connection) {
         connection.player = this;
         this.connection = connection;

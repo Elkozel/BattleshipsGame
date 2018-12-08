@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Game Try1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,15 +8,17 @@
     <script src="webSocketsScript.js"></script>
     <script src="gameEssentials.js"></script>
 </head>
+
 <body>
     <div id="playField">
+        <img id="shipPlace" src="https://preview.redd.it/srwktu65v6501.png?width=960&crop=smart&auto=webp&s=de5cd2500dca0f0e4fbeca617e05238719fb45dd">
         <table id="attackField"></table>
         <div id="GUIField">
             <div id="gameMenu" data-display="waitGame">
 
             </div>
             <div id="shipContainer" data-display="waitGame">
-                <div class="ship" ship-type="Carrier" ship-name="">
+                <div class="ship" ship-image="https://preview.redd.it/srwktu65v6501.png?width=960&crop=smart&auto=webp&s=de5cd2500dca0f0e4fbeca617e05238719fb45dd" ship-size="3" onmousedown="positionShip(this)">
                     <p>Ship type</p>
                     <img src="https://preview.redd.it/srwktu65v6501.png?width=960&crop=smart&auto=webp&s=de5cd2500dca0f0e4fbeca617e05238719fb45dd">
                     <input type="text" placeholder="Carrier">
@@ -32,6 +35,7 @@
         <h3 id="messageBody"></h3>
     </div>
 </body>
-<script src="constructField.js"></script>
 <script src="ships.js"></script>
+<script src="constructField.js"></script>
+
 </html>

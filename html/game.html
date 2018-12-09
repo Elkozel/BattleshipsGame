@@ -5,8 +5,8 @@
     <title>Game Try1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="game.css">
-    <script src="webSocketsScript.js"></script>
     <script src="gameEssentials.js"></script>
+    <script src="webSocketsScript.js"></script>
 </head>
 
 <body>
@@ -42,10 +42,12 @@
         </div>
         <div id="menu" class="loading">
             <div id="privateGame">
-
+                <button onclick="createPrivateGame()">Create Private Game</button>
             </div>
             <div id="publicGame">
-
+                <img src="https://images.alphacoders.com/798/thumb-1920-798300.jpg">
+                <button onclick="createGame()">Create Game</button>
+                <button onclick="getGames()"> Get Games</button>
             </div>
         </div>
     </div>

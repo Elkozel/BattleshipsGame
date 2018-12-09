@@ -6,8 +6,12 @@ var Game = {
     moves: [],
     startTime: null
 }
-var url = new URL(window.location.href);
-Game.userName = url.searchParams.get("user");
+var url = window.location.href
+var index = url.split("user=");
+Game.userName = index[1];
+console.log(Game.userName);
+
+
 
 function clicked(obj) {
     if (obj.cellIndex != null && obj.parentNode.rowIndex != null) {

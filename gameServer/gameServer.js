@@ -244,7 +244,7 @@ class Game {
 
 var gameServer = {
     games: [],
-    players: [new Player("Hello World")],
+    players: [],
     waitList: [],
     nextID: 0,
     getID: function () {
@@ -293,9 +293,8 @@ var gameServer = {
             if (this.players[s].name === username) {
                 return this.players[s];
             }
-            else
-                return;
         }
+        return;
     },
     getPlayerIndexByUsername: function (username) {
         for (var s = 0; s < this.players.length; s++) {
@@ -310,36 +309,33 @@ var gameServer = {
             if (this.waitList[s].Player1.name === username || this.waitList[s].Player2.name === username) {
                 return this.waitList[s];
             }
-            else
-                return;
         }
+        return;
     },
     getGameByGameID: function (ID) {
         for (var s = 0; s < this.games.length; s++) {
             if (this.games[s].gameID === ID) {
                 return this.games[s];
             }
-            else
-                return;
+                
         }
+        return;
     },
     getIndexByGameID: function (ID) {
         for (var s = 0; s < this.games.length; s++) {
             if (this.games[s].gameID === ID) {
                 return s;
             }
-            else
-                return;
         }
+        return;
     },
     getWaitlistIndex: function (game) {
         for (var s = 0; s < this.waitList.length; s++) {
             if (this.waitList[s].Player1 === game.Player1 && this.waitList[s].Player2 === game.Player2) {
                 return s;
             }
-            else
-                return;
         }
+        return;
     },
     processRequest: function (connection, message) {
         if (message.userName != null) {

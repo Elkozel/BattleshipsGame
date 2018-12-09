@@ -9,6 +9,9 @@ from.onsubmit = function(){
     else{
         username.classList.add("invalid");
         prevUsername = username.value;
+        if(username.val.length > 20){
+            document.getElementById("login_errorPointer").innerHTML = "Password needs to be at most 20 characters";
+        }
     }
     return false;
 }

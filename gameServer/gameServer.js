@@ -4,6 +4,7 @@ class Player {
         this.name = name;
         this.ships = ships;
         this.isConnected = false;
+        this.hasConnected = false;
         this.connection = connection;
         this.game = game;
     }
@@ -48,9 +49,9 @@ class Player {
         if (ships.length >= 5)
             this.ships = ships;
     }
-    isAlive(){
-        for(var s=0; s<this.ships.length; s++){
-            if(this.ships[s].size > this.ships[s].hits.length)
+    isAlive() {
+        for (var s = 0; s < this.ships.length; s++) {
+            if (this.ships[s].size > this.ships[s].hits.length)
                 return true;
         }
         return false;
@@ -59,12 +60,19 @@ class Player {
         connection.player = this;
         this.connection = connection;
         this.isConnected = true;
+        this.hasConnected = true;
     }
     detachConnection(connection) {
         connection.player = null;
         this.connection = null;
         this.isConnected = false;
-        this.game.disconnected();
+        if (this.game != null)
+            this.game.disconnected();
+        var user = this;
+        setTimeout(function () {
+            if (!user.isConnected)
+                gameServer.players.splice(gameServer.getPlayerIndexByUsername(user.name), 1);
+        }, 30000)
     }
 }
 
@@ -156,18 +164,29 @@ class Game {
         this.turn = null;
         this.status = "End";
         var game = this.gameID;
+        this.sendMessage(JSON.stringify({
+            startTime: this.startTime,
+            updateType: "Game Ended"
+        }))
         if (game >= 0)
             setTimeout(function () {
                 var index = gameServer.getIndexByGameID(game)
                 if (index >= 0)
                     gameServer.games.splice(index, 1);
-            }, 1000)
+            }, 30000)
         else
             console.log("ERROR, I could not delete the game");
     }
     disconnected() {
-        if ((!this.Player1.isConnected || !this.Player2.isConnected) && this.status == "ongoing")
+        if ((!this.Player1.isConnected || !this.Player2.isConnected) && this.status == "ongoing") {
             this.broadcast(JSON.stringify({ errorMessage: "Game failed to start (Opponent disconnected)", disconnect: true }));
+            var game = this;
+            setTimeout(function () {
+                if(game.Player1.isConnected ^ game.Player2.isConnected){
+                    game.end();
+                }
+            }, 20000);
+        }
     }
     reconnected(player) {
         this.broadcast(JSON.stringify({ reconnect: true }));
@@ -205,7 +224,6 @@ class Game {
             author: player.name,
             text: message
         }
-        // implement profanity filter
         this.chat.push(chatMsg);
         this.broadcastChat();
     }
@@ -248,8 +266,16 @@ var gameServer = {
         }
     },
     addPlayer(player) {
-        if (this.checkUsername(player.name)) {
-            this.players.push(player);
+        if (!this.checkUsername(player)) {
+            this.players.push(new Player(player, null, null));
+            var username = player;
+            var server = this;
+            setInterval(function () {
+                var index = server.getPlayerIndexByUsername(username);
+                if (index != null && !server.players[index].hasConnected) {
+                    server.players.splice(index, 1);
+                }
+            }, 30000);
             return true;
         }
         else
@@ -270,6 +296,14 @@ var gameServer = {
             else
                 return;
         }
+    },
+    getPlayerIndexByUsername: function (username) {
+        for (var s = 0; s < this.players.length; s++) {
+            if (this.players[s].name === username) {
+                return s;
+            }
+        }
+        return;
     },
     getGameByUsername: function (username) {
         for (var s = 0; s < this.waitList.length; s++) {
@@ -297,7 +331,6 @@ var gameServer = {
             else
                 return;
         }
-
     },
     getWaitlistIndex: function (game) {
         for (var s = 0; s < this.waitList.length; s++) {

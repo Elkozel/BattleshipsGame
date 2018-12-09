@@ -1,7 +1,9 @@
 var from = document.getElementById('login_form');
 var username = document.getElementById('login_username');
+initializeConnection(window.location.hostname, 3884);
+Statistics.start(connection);
 from.onsubmit = function(){
-    if(username.value.length >= 5){
+    if(username.value.length >= 4 && username.value.length <= 20){
         sendUsername(username.value);
     }
     else{
@@ -12,7 +14,7 @@ from.onsubmit = function(){
 }
 
 function sendUsername(username){
-    
+    connection.send(JSON.stringify({"login" : username}));
 }
 
 username.addEventListener("keyup", function(){
@@ -21,3 +23,32 @@ username.addEventListener("keyup", function(){
         username.classList.remove("invalid");
     }
 });
+
+
+function initializeConnection(ip, port){
+    window.WebSocket = window.WebSocket || window.MozWebSocket;
+    connection = new WebSocket("ws://" + ip + ":" + port);
+
+    connection.onerror = function(error){
+        console.log("Critical error encountered: " + error);
+    }
+    connection.onmessage = function(message){
+        message = JSON.parse(message.data);
+        if(message.login != null){
+            if(message.login){
+                document.location.href = "/game.html?user=" + username.value;
+            }
+            else{
+                username.classList.add("invalid");
+                prevUsername = username.value;
+                document.getElementById("login_errorPointer").innerHTML = message.reason;
+            }
+        }
+        else if(message.stats != null){
+            Statistics.updateStats(message.stats.playersOnline, message.stats.gamesPlayed, message.stats.isAndyPlaying);
+        }
+        else{
+            console.log("Error, could not understand server: " + message);
+        }
+    }
+}

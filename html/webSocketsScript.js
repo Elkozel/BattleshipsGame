@@ -4,7 +4,18 @@ function initializeConnection(ip, port){
     connection = new WebSocket("ws://" + ip + ":" + port);
 
     connection.onerror = function(error){
-        console.log("Critical error encountered: " + error);
+        var menu = document.getElementById("menu");
+        menu.style.width = "100%";
+        menu.classList.add("error");
+    }
+    connection.onopen = function(){
+        var menu = document.getElementById("menu");
+        menu.style.width = "100%";
+        setTimeout(function(){
+            menu.classList.remove("loading");
+            document.getElementById("loading_Img").style.display = "none";
+            document.getElementById("loading").classList.add("loaded");
+        },800);
     }
     connection.onmessage = function(message){
         console.log("Received: " + message.data);
@@ -30,7 +41,7 @@ function initializeConnection(ip, port){
             if(message.request === "auth"){
                 var authentication = {
                     gameID: null,
-                    userName: "Hello World"
+                    userName: Game.userName
                 }
                 connection.send(JSON.stringify(authentication)); // send authentication
             }

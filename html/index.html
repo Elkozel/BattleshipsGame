@@ -14,23 +14,23 @@
             <div id="login_area">
                 <form action="POST" id="login_form">
                     <input type="text" id="login_username" name="username" placeholder="Username">
-                    <p id="login_errorPointer">Password needs to be at least 5 characters</p>
+                    <p id="login_errorPointer">Password needs to be at least 4 characters</p>
                     <button type="submit" id="button_submit">Let's roll!</button>
                 </form>
             </div>
         </div>
         <div class="statistics_area">
             <div class="statstics_cage">
-                <span> 120 </span>
-                <p> Players today </p>
+                <span id="stats_PlayersOnline"> 0 </span>
+                <p> Players online </p>
             </div>
             <div class="statstics_cage">
-                <span> 1250 </span>
-                <p> Curses over chat </p>
+                <span id="stats_GamesInProgress"> 0 </span>
+                <p> Games in progress </p>
             </div>
             <div class="statstics_cage">
-                <span> No </span>
-                <p> Is Andy Playing? </p>
+                <span id="stats_IsAndyPlaying"> No </span>
+                <p> Is Andy Playing </p>
             </div>
         </div>
         <div id="moreInfo">
@@ -60,6 +60,6 @@
             </div>
         </div>
     </body>
-    <script src="loginScript.js"></script>
     <script src="statistics.js"></script>
+    <script src="loginScript.js"></script>
 </html>

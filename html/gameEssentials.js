@@ -6,6 +6,9 @@ var Game = {
     moves: [],
     startTime: null
 }
+var url = new URL(window.location.href);
+Game.userName = url.searchParams.get("user");
+
 function clicked(obj) {
     if (obj.cellIndex != null && obj.parentNode.rowIndex != null) {
         console.log("Sent move on: " + obj.cellIndex + ":" + obj.parentNode.rowIndex);
@@ -38,3 +41,36 @@ function updateGame() {
 
     GameField.refresh();
 }
+
+
+window.addEventListener("load", function(){
+    document.getElementById("fullscreen").addEventListener("click", function(){
+        var GameField = document.getElementById("playField");
+        if(fullscreen == null)
+            fullscreen = false;
+        if(fullscreen){
+            if (document.exitFullscreen)
+                document.exitFullscreen();
+            else if (document.mozCancelFullScreen)
+                document.mozCancelFullScreen();
+            else if (document.webkitExitFullscreen)
+                document.webkitExitFullscreen();
+            else if (document.msExitFullscreen)
+                document.msExitFullscreen();
+            fullscreen = false;
+        }
+        else{
+            if (GameField.requestFullscreen)
+                GameField.requestFullscreen();
+            else if (GameField.mozRequestFullScreen)
+                GameField.mozRequestFullScreen();
+            else if (GameField.webkitRequestFullscreen)
+                GameField.webkitRequestFullscreen();
+            else if (GameField.msRequestFullscreen)
+                GameField.msRequestFullscreen();
+            fullscreen = true;
+        }
+    })
+    this.document.getElementById("menu").style.width = "30%";
+    initializeConnection(window.location.hostname, 80);
+})

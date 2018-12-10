@@ -1,0 +1,51 @@
+#moreInfo{
+    padding-top: 3%;
+    padding-bottom: 3%;
+    width: 100%;
+    margin: auto;
+    color: white;
+}
+.infoItem{
+    width: 75%;
+    margin: auto;
+    padding-top: 2%;
+    overflow: hidden;
+}
+.infoItem img{
+    position: relative;
+    float: right;
+    max-width: 36%;
+    margin: 2%;
+    margin-top: 0%;
+    margin-left: 3%;
+}
+.infoItem h2{
+    width: 100%;
+    text-align: left;
+    font-family: "Arial Black", Gadget, sans-serif;
+}
+.infoItem p{
+    text-align: left;
+    font-style: italic;
+}
+.infoItem.toRight img{
+    float: left;
+    margin-left: 0%;
+    margin-right: 3%;
+}
+.infoItem.toRight h2{
+    text-align: right;
+}
+@media (max-width:768px){
+    .infoItem h2, .infoItem.toRight h2{
+        text-align: center;
+    }
+    .infoItem p{
+        text-align: center;
+    }
+    .infoItem img{
+        margin-bottom: 3%;
+        align-self: center;
+        max-width: 100%;
+    }
+}

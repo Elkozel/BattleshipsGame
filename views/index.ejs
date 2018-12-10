@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><%= title %></title>
+        <link href="./login.css" type="text/css" rel="stylesheet">
+        <link href="./statistics.css" type="text/css" rel="stylesheet">
+        <link href="./moreInfo.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="login_background">
+            <div id="login_filter"></div>
+            <h1 id="login_title"> Welcome to Battleships! </h1>
+            <div id="login_area">
+                <form id="login_form">
+                    <input type="text" id="login_username" name="username" placeholder="Username">
+                    <p id="login_errorPointer">Password needs to be at least 4 characters</p>
+                    <button type="submit" id="button_submit">Let's roll!</button>
+                </form>
+            </div>
+        </div>
+        <div class="statistics_area">
+            <div class="statstics_cage">
+                <span id="stats_PlayersOnline"><%= playersOnline %></span>
+                <p> Players online </p>
+            </div>
+            <div class="statstics_cage">
+                <span id="stats_GamesInProgress"><%= gamesInProgress %></span>
+                <p> Games in progress </p>
+            </div>
+            <div class="statstics_cage">
+                <span id="stats_gamesTotal"><%= gamesTotal %> </span>
+                <p> Games played in total </p>
+            </div>
+        </div>
+        <div id="moreInfo">
+            <div id="item1" class="infoItem">
+                <h2> About the game </h2>
+                <p>
+                    <img src="https://foreignpolicymag.files.wordpress.com/2012/10/battleships8.jpg?w=625">
+                    The game of Battleship is thought to have its origins in the French game L'Attaque played during World War I, although parallels have also been drawn to E. I. Horseman's 1890 game Baslinda, and the game is said to have been played by Russian officers before World War I. The first commercial version of the game was Salvo, published in 1931 in the United States by the Starex company. Other versions of the game were printed in the 1930s and 1940s, including the Strathmore Company's Combat: The Battleship Game, Milton Bradley's Broadsides: A Game of Naval Strategy and Maurice L. Freedman's Warfare Naval Combat. Strategy Games Co. produced a version called Wings which pictured planes flying over the Los Angeles Coliseum. All of these early editions of the game consisted of pre-printed pads of paper.
+                </p>
+                <p>
+                    In 1967 Milton Bradley introduced a version of the game that used plastic boards and pegs. The method of play involved using pegboards and miniaturized plastic ships, and was thought of by Ed Hutchins. In 1977, Milton Bradley also released a computerized Electronic Battleship, followed in 1989 by Electronic Talking Battleship. In 2008, an updated version of Battleship was released, using hexagonal tiles. In the updated version, each player's board contains several islands on which "captured man" figurines can be placed. Ships may be placed only around the islands, and only in the player's half of the board. When the movie Battleship was released, the board game reverted to the original 1967 style. The 2008 updated version is still available as Battleship Islands.
+                </p>
+            </div>
+            <div id="item2" class="infoItem toRight">
+                <h2> How to play </h2>
+                <p>
+                    <img src="https://www.lookandlearn.com/history-images/preview/A/A006/A006787_Who-Said-In-this-country-it-is-thought-necessary-to-kill-an-admiral-from-time-to-time-to-encourage-the-others.jpg">
+                    Upon loading, position your ships on the battlefield and then wait untill it is your turn to attack. The person loses all of his ships loses! Good luck!
+                </p>
+            </div>
+        </div>
+    </body>
+    <script src="statistics.js"></script>
+    <script src="loginScript.js"></script>
+</html>

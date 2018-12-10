@@ -247,14 +247,17 @@ var gameServer = {
     players: [],
     waitList: [],
     nextID: 0,
+    gamesTotal: 0,
     getID: function () {
         return this.nextID++;
     },
     createGame: function (Player1) {
         this.waitList.push(new Game(Player1, null, null));
+        this.gamesTotal++;
     },
     createPrivateGame: function (Player1) {
         this.games.push(new Game(Player1, null, this.getID()));
+        this.gamesTotal++;
         return this.nextID - 1;
     },
     endGame: function (ID) {

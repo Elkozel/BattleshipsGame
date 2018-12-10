@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Game Try1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="game.css">
+    <script src="gameEssentials.js"></script>
+    <script src="webSocketsScript.js"></script>
+</head>
+
+<body>
+    <div id="playField" class="blur">
+        <div id="fullscreen">
+            <img src="https://cdn0.iconfinder.com/data/icons/video-editing/100/8-512.png">
+        </div>
+        <img id="shipPlace" src="https://preview.redd.it/srwktu65v6501.png?width=960&crop=smart&auto=webp&s=de5cd2500dca0f0e4fbeca617e05238719fb45dd">
+        <table id="attackField"></table>
+        <div id="GUIField">
+            <div id="gameMenu" data-display="waitGame">
+
+            </div>
+            <div id="shipContainer" data-display="waitGame">
+                <div class="ship" ship-image="https://preview.redd.it/srwktu65v6501.png?width=960&crop=smart&auto=webp&s=de5cd2500dca0f0e4fbeca617e05238719fb45dd" ship-size="3" onmousedown="positionShip(this)">
+                    <p>Ship type</p>
+                    <img src="https://preview.redd.it/srwktu65v6501.png?width=960&crop=smart&auto=webp&s=de5cd2500dca0f0e4fbeca617e05238719fb45dd">
+                    <input type="text" placeholder="Carrier">
+                </div>
+            </div>
+            <div id="gameStatus" data-display="waitGame">
+
+            </div>
+        </div>
+        <table id="playerField"></table>
+    </div>
+    <div id="startField">
+        <div id="loading">
+            <h1>Loading</h1>
+            <div>
+                <img id="loading_Img" src="https://media.giphy.com/media/dinkKDRF3aHo4/giphy.gif">
+            </div>
+        </div>
+        <div id="menu" class="loading">
+            <div id="privateGame">
+                <button onclick="createPrivateGame()">Create Private Game</button>
+            </div>
+            <div id="publicGame">
+                <img src="https://images.alphacoders.com/798/thumb-1920-798300.jpg">
+                <button onclick="createGame()">Create Game</button>
+                <button onclick="getGames()"> Get Games</button>
+            </div>
+        </div>
+    </div>
+    <div id="messageDisplay">
+        <h1 id="messageHeader"></h1>
+        <h3 id="messageBody"></h3>
+    </div>
+</body>
+<script src="ships.js"></script>
+<script src="constructField.js"></script>
+
+</html>

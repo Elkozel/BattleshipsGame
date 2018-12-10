@@ -1,7 +1,7 @@
 var statisticsServer = {
     playersOnline: 0,
     gamesPlayed: 0,
-    isAndyPlaying: false,
+    gamesTotal: 0,
     gameServer: null,
     frequency: null,
     start: function(gameServer, frequency = 1000){
@@ -16,10 +16,7 @@ var statisticsServer = {
         if(this.gameServer != null){
             this.playersOnline = this.gameServer.players.length;
             this.gamesPlayed = this.gameServer.games.length;
-            if(this.gameServer.checkUsername("Andy"))
-                this.isAndyPlaying = true;
-            else
-                this.isAndyPlaying = false;
+            this.gamesTotal = this.gameServer.gamesTotal
         }
         else
             console.log("Error with statistics Server!");
@@ -28,7 +25,7 @@ var statisticsServer = {
         var ret = {
             playersOnline: this.playersOnline,
             gamesPlayed: this.gamesPlayed,
-            isAndyPlaying: this.isAndyPlaying,
+            gamesTotal: this.gamesTotal,
             frequency: this.frequency
         }
         return ret;

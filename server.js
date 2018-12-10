@@ -7,22 +7,33 @@ StatisticsServer.start(GameServer);
 var url = require('url');
 var app = express();
 var port = 80;
+var ejs = require('ejs');
 var bodyparser = require('body-parser');
 var server = http.createServer(app).listen(port, (req, res) => {
     console.log("running on port: " + port);
 });
+var statsServer = require('./statisticsServer/statisticsServer');
+var inGameStats = statsServer.getStats;
+var context = {
+    title: "Welcome to Battleships!",
+    playersOnline: inGameStats.playersOnline,
+    gamesInProgress: inGameStats.gamesInProgress,
+    gamesTotal: 1    
+}
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
+
+app.set('views', __dirname + '/views');
+app.set('view engine','ejs');
+
+app.get('/',function(req,res){
+    res.render('index', context);
+})
 
 app.get('/stats/statistics.js', (req, res) => {
     res.sendFile('/stats/statistics.js');
 })
-app.post('/login', (req, res) => {
-    var username = req.body.username;
-    console.log(username);
-    res.send(username);
-})
-app.use(express.static(__dirname + "/html"));
+app.use(express.static(__dirname + "/views"));
 
 var WebSocketServer = new WebSocket({
     httpServer: server

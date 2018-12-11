@@ -1,0 +1,278 @@
+body{
+    margin: 0px;
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    animation-name: killAnimation;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+}
+#playField{
+    display: flex;
+    height: 100%;
+    transition: filter 1s linear, opacity 1.8s linear;
+    -o-transition: -webkit-filter 1s linear, opacity 1.8s linear;
+    -ms-transition: -ms-filter 1s linear, opacity 1.8s linear;
+    -moz-transition: -webkit-filter 1s linear, opacity 1.8s linear;
+    -webkit-transition: -webkit-filter 1s linear, opacity 1.8s linear;
+}
+@media(max-width: 756px){
+    #playField::after{
+        content: "WARNING, YOUR SCREEN IS TOO SMALL";
+        color: red;
+        text-align: center;
+        position: fixed;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+        background-color: white;
+    }
+}
+#playField.blur{
+    filter: blur(10px);
+    opacity: 0.15;
+}
+#playerField, #attackField{
+    position: relative;
+    top: 0px;
+    height: 40vw;
+    width: 40vw;
+}
+#playerField td, #attackField td{
+    transition: background-color 1s linear;
+}
+#playerField td:hover, #attackField td:hover{
+    background-color: white;
+}
+#attackField *{
+    border-color: green;
+    color: green;
+}
+#playerField{
+    background-image: url("charts.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#playerField td.ship{
+    background-color: rgba(179, 179, 179, 0.8)
+}
+#playerField td.hit{
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/f/f2/Vote_icon_transparent.svg");
+    background-size: 80%;
+    background-position: center;
+}
+table{
+    width: 40%;
+    max-height: 100%;
+    table-layout: fixed;
+    border-spacing: 0px;
+}
+table td{
+    border-right: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    width: 100%;
+}
+table > tbody > tr > td:first-of-type{
+    font-weight: bold;
+    border: none;
+    text-align: center;
+}
+#GUIField{
+    width: 20vw;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-color: white;
+    border-width: initial;
+    margin-left: 2%;
+    margin-right: 2%;
+    padding-bottom: 2%;
+    padding-top: 2%;
+}
+#shipContainer{
+    width: 96%;
+    margin: 0px 2%;
+}
+#shipContainer > div{
+    border-style: double;
+    border-color: white;
+    border-width: 1px;
+}
+#shipContainer p{
+    vertical-align: middle;
+    color: white;
+    background: -moz-linear-gradient(top, rgba(127,127,127,0.3) 0%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(127,127,127,0.3) 0%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(127,127,127,0.3) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d7f7f7f', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+}
+#shipContainer p::before{
+    content: "USS ";
+    font-weight: bold;
+}
+#shipContainer img{
+    width: 100%;
+}
+#shipContainer input{
+    width: 96%;
+    background-color: transparent;
+    color: white;
+    padding-left: 2%;
+    border-radius: 15px;
+    border-color: grey;
+    border-style: solid;
+
+}
+#shipContainer input:active{
+    border-color: white;
+}
+#fullscreen{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 5vw;
+    width: 5vw;
+    z-index: 1;
+}
+#fullscreen img{
+    width: 100%;
+    height: 100%;
+}
+#startField{
+    width: 60%;
+    height: 90%;
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+}
+#loading{
+    width: 100%;
+    height: 93%;
+    overflow: hidden;
+    transition: height 1s linear;
+    background-color: #14141c;
+}
+#loading h1{
+    text-align: center;
+    color: white;
+}
+#loading img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: default;
+    height: 60%;
+}
+#loading.loaded{
+    height: 0px;
+}
+#loading.loaded + #menu{
+    padding: 0px;
+}
+#menu.loading{
+    background-color: green;
+}
+#menu.error{
+    background-color: red;
+}
+#menu{
+    transition: background-color 0.5s linear, width 0.3s linear;
+    background-color: white;
+    padding-top: 20vh;
+    width: 1%;
+    height: 100%;
+    display: inline-flex;
+}
+#privateGame, #publicGame{
+    width: 50%;
+    height: 100%;
+}
+#publicGame{
+    background-image: url("https://images.alphacoders.com/798/thumb-1920-798300.jpg");
+    background-size: cover;
+    background-position: center;
+}
+#publicGame_filter{
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    
+background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);}
+#gameControls{
+    width: 100%;
+    height: 80%;
+    align-content: center;
+}
+#gameList{
+    width: 80%;
+    height: 60%;
+}
+#privateGame h1, #publicGame h1{
+    text-align: center;
+    margin: 0px;
+    padding: 10% 0px;   
+}
+#messageDisplay{
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 70vh;
+    color: white;
+}
+#messageDisplay.active{
+    display: initial;
+    z-index: 10;
+}
+#messageDisplay > h1{
+    text-align: center;
+}
+#messageDisplay > h3{
+    text-align: center;
+    font-style: italic;
+}
+
+#shipPlace{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: auto;
+    max-width: 12vw;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1s linear;
+}
+#shipPlace.active{
+    opacity: 1;
+    z-index: 1;
+}
+@keyframes killAnimation{
+    0%{background-color: black;}
+    29%{background-color: black;}
+    30%{background-color: white;}
+    39%{background-color: white;}
+    40%{background-color: black;}
+    59%{background-color: black;}
+    60%{background-color: white;}
+    69%{background-color: white;}
+    70%{background-color: black;}
+    100%{background-color: black;}
+}
+#playField{
+    display: flex;
+    height: 100%;
+    transition: filter 1s linear, opacity 1.8s linear;
+    -o-transition: -webkit-filter 1s linear, opacity 1.8s linear;
+    -ms-transition: -ms-filter 1s linear, opacity 1.8s linear;
+    -moz-transition: -webkit-filter 1s linear, opacity 1.8s linear;
+    -webkit-transition: -webkit-filter 1s linear, opacity 1.8s linear;
+}

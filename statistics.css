@@ -1,0 +1,79 @@
+.statistics_area{
+    position: absolute;
+    overflow: hidden;
+    left: 50%;
+    bottom: 0%;
+    width: 60%;
+    height: 15vh;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+.statstics_cage{
+    display: block;
+    float: left;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    color: white;
+    height: 15vh;
+    width: 30%;
+    margin: auto;
+    border-style: dashed;
+    border-color: lightgrey;
+    border-width: 0px;
+    border-right-width: 2px;
+    z-index: 2;
+    min-width: 180px;
+}
+.statstics_cage:last-of-type{
+    border-right-width: 0px;
+}
+.statstics_cage > span{
+    color: white;
+    width: 100%;
+    font-weight: bold;
+    font-family: Impact, Charcoal, sans-serif;
+    line-height: 175%;
+    font-size: 175%;
+    vertical-align: middle;
+}
+.statstics_cage > p{
+    line-height: 150%;
+    font-size: 125%;
+    color: darkgrey;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-style: italic;
+    white-space: nowrap;
+}
+.statstics_cage > p::before{
+    content: "Number of ";
+}
+@media (max-width:992px){
+    .statistics_area{
+        width:80%;
+    }
+}
+.small{
+    display: none;
+}
+@media (max-width:768px){
+    .statistics_area{
+        display: grid;
+        display: -ms-grid;
+        overflow: visible;
+        position: static;
+        padding-top: 5%;
+        padding-bottom: 5%;
+        margin: auto;
+        transform: none;
+        height: auto;
+    }
+    .statstics_cage{
+        padding-bottom: 8%;
+        border: none;
+        width: 65%;
+    }
+}

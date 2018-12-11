@@ -1,0 +1,126 @@
+
+body{
+    margin: 0px !important;
+    background-color: black !important;
+}
+#login_background{
+    width: 100%;
+    height: 100vh;
+    background-image: url(https://stmed.net/sites/default/files/battleship-wallpapers-29415-4028436.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    z-index: 0;
+}
+#login_filter{
+    width: 100%;
+    height: 100%;
+    /* for the person looking at the code: use http://www.colorzilla.com/gradient-editor/ */
+    background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 32%, rgba(0,0,0,0.9) 75%, rgba(0,0,0,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0.4) 32%,rgba(0,0,0,0.9) 75%,rgba(0,0,0,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0.4) 32%,rgba(0,0,0,0.9) 75%,rgba(0,0,0,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+    z-index: 1;
+}
+#login_area{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 60%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+#login_area .invalid, #login_area .invalid:hover, #login_area .invalid:focus{
+    border-color: red !important;
+    color:red !important;
+    border-style: solid !important;
+}
+#login_username{
+    width: 96%;
+    color: grey;
+    padding-left: 2%;
+    padding-right: 2%;
+    line-height: 150%;
+    font-size: 175%;
+    text-align: center;
+    align-self: center;
+    outline: none;
+    border-color: transparent;
+    border-style: solid;
+    border-radius: 15px;
+    transition: border 0.4s ease-in, color 0.4s ease-in;
+    min-width: 180px;
+}
+#login_username:hover, #login_username:focus{
+    border-color: black;
+    color: black;
+}
+#login_username.invalid + #login_errorPointer{
+    opacity: 1; 
+}
+#login_errorPointer{
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -100%);
+    text-align: center;
+    margin: auto;
+    max-width: 90%;
+    color: white;
+    word-wrap: break-word;
+    background-color: rgba(255, 0, 0, 0.78);
+    border-color: white;
+    border-style: solid;
+    border-bottom: none;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 0.75% 3%;
+    overflow: hidden;
+    transition: opacity 0.5s linear;
+}
+#button_submit{
+    outline: none;
+    cursor: pointer;
+    align-self: center;
+    font-weight: bold;
+    color: white;
+    background-color: darkblue;
+    width: 40%;
+    line-height: 175%;
+    font-size: 125%;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 15px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    box-shadow: none;
+    min-width: 150px;
+    animation-duration: 4s;
+    animation-name: colorSwitch;
+    animation-iteration-count: infinite;
+}
+#button_submit:active{
+    animation: none;
+    background-color: blue;
+}
+#login_title{
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    width: 80%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    font-family: Impact, Charcoal, sans-serif;
+}
+@keyframes colorSwitch{
+    0%{background-color: darkblue;}
+    25%{background-color: darkgreen;}
+    50%{background-color: darkgoldenrod;}
+    75%{background-color: darkviolet;}
+    100%{background-color: darkblue;}
+}

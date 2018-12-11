@@ -10,8 +10,19 @@ var url = window.location.href
 var index = url.split("user=");
 Game.userName = index[1];
 console.log(Game.userName);
-
-
+console.log(document.cookie);
+if(document.cookie != ""){
+    var cookie = document.cookie;
+    var start = cookie.indexOf("counter=");
+    var end = cookie.indexOf(";", start);
+    var counter = cookie.substring(start + 8);
+    if(end >=0)
+        counter = cookie.substring(start + 8, end);
+    document.cookie =  cookie.replace(counter, parseInt(counter) + 1);
+}
+else{
+    document.cookie = "counter=1; expires=Tue Jan 19 2038 03:14:07 UTC;"
+}
 
 function clicked(obj) {
     if (obj.cellIndex != null && obj.parentNode.rowIndex != null) {

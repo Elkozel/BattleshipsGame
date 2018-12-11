@@ -28,6 +28,11 @@
     text-align: left;
     font-style: italic;
 }
+.infoItem p::after{
+    content: "Source: currently missing";
+    color: darkred;
+    font-style: italic;
+}
 .infoItem.toRight img{
     float: left;
     margin-left: 0%;

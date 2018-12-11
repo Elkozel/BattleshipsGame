@@ -98,6 +98,13 @@ body{
     border-top-right-radius: 0px;
     box-shadow: none;
     min-width: 150px;
+    animation-duration: 4s;
+    animation-name: colorSwitch;
+    animation-iteration-count: infinite;
+}
+#button_submit:active{
+    animation: none;
+    background-color: blue;
 }
 #login_title{
     color: white;
@@ -109,4 +116,11 @@ body{
     transform: translate(-50%, -50%);
     z-index: 2;
     font-family: Impact, Charcoal, sans-serif;
+}
+@keyframes colorSwitch{
+    0%{background-color: darkblue;}
+    25%{background-color: darkgreen;}
+    50%{background-color: darkgoldenrod;}
+    75%{background-color: darkviolet;}
+    100%{background-color: darkblue;}
 }

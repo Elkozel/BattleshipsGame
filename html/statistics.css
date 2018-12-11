@@ -39,7 +39,6 @@
     line-height: 175%;
     font-size: 175%;
     vertical-align: middle;
-    
 }
 .statstics_cage > p{
     line-height: 150%;
@@ -48,6 +47,9 @@
     font-family: "Comic Sans MS", cursive, sans-serif;
     font-style: italic;
     white-space: nowrap;
+}
+.statstics_cage > p::before{
+    content: "Number of ";
 }
 @media (max-width:992px){
     .statistics_area{

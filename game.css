@@ -3,6 +3,9 @@ body{
     height: 100vh;
     width: 100vw;
     background-color: black;
+    animation-name: killAnimation;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
 }
 #playField{
     display: flex;
@@ -12,6 +15,18 @@ body{
     -ms-transition: -ms-filter 1s linear, opacity 1.8s linear;
     -moz-transition: -webkit-filter 1s linear, opacity 1.8s linear;
     -webkit-transition: -webkit-filter 1s linear, opacity 1.8s linear;
+}
+@media(max-width: 756px){
+    #playField::after{
+        content: "WARNING, YOUR SCREEN IS TOO SMALL";
+        color: red;
+        text-align: center;
+        position: fixed;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+        background-color: white;
+    }
 }
 #playField.blur{
     filter: blur(10px);
@@ -90,6 +105,10 @@ table > tbody > tr > td:first-of-type{
     background: linear-gradient(to bottom, rgba(127,127,127,0.3) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d7f7f7f', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
 }
+#shipContainer p::before{
+    content: "USS ";
+    font-weight: bold;
+}
 #shipContainer img{
     width: 100%;
 }
@@ -102,6 +121,9 @@ table > tbody > tr > td:first-of-type{
     border-color: grey;
     border-style: solid;
 
+}
+#shipContainer input:active{
+    border-color: white;
 }
 #fullscreen{
     position: absolute;
@@ -232,6 +254,18 @@ background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 5
 #shipPlace.active{
     opacity: 1;
     z-index: 1;
+}
+@keyframes killAnimation{
+    0%{background-color: black;}
+    29%{background-color: black;}
+    30%{background-color: white;}
+    39%{background-color: white;}
+    40%{background-color: black;}
+    59%{background-color: black;}
+    60%{background-color: white;}
+    69%{background-color: white;}
+    70%{background-color: black;}
+    100%{background-color: black;}
 }
 #playField{
     display: flex;
